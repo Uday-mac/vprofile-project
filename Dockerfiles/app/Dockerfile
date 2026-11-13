@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM maven:3.9.9-eclipse-temurin-21-jammy AS BUILD
+FROM maven:3.9.9-eclipse-temurin-21-jammy AS build
 
 WORKDIR /app
 
@@ -14,7 +14,7 @@ FROM tomcat:10-jdk21
 
 RUN rm -rf /usr/local/tomcat/webapps/*
 
-COPY --from=BUILD target/vprofile-v2.war /usr/local/tomcat/webapps/ROOT.war
+COPY --from=build target/vprofile-v2.war /usr/local/tomcat/webapps/ROOT.war
 
 EXPOSE 8080
 
