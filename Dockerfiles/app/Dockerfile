@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM maven:3.9.9-eclipse-temurin-21-jammy as BUILD
+FROM --platform=$BUILDPLATFORM maven:3.9.9-eclipse-temurin-21-jammy AS BUILD
 
 WORKDIR /app
 
