@@ -14,7 +14,7 @@ FROM tomcat:10-jdk21
 
 RUN rm -rf /usr/local/tomcat/webapps/*
 
-COPY --from=build /target/vprofile-v2.war /usr/local/tomcat/webapps/ROOT.war
+COPY --from=build /app/target/vprofile-v2.war /usr/local/tomcat/webapps/ROOT.war
 
 EXPOSE 8080
 
