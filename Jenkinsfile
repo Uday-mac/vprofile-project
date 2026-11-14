@@ -4,20 +4,22 @@ pipeline {
         jdk   'jdk21'
         maven 'maven3'
     }
+    environment {
+        SNAP_REPO = "vprofile-snapshot"
+        RELEASE_REPO = "vprofile-release"
+        CENTRAL_REPO = "vprofile-maven-central"
+        NEXUS_GRP_REPO = "vprofile-maven-group"
+        NEXUS_USER = "admin"
+        NEXUS_PASS = "Devops@2026"
+        NEXUSIP = "172.31.30.233"
+        NEXUSPORT = "8081"
+        NEXUS_LOGIN = "nexus_login"
+
+    }
     stages {
-        stage('fetch code') {
-            steps {
-                git branch: 'jenkins', url: 'https://github.com/Uday-mac/vprofile-project.git'
-            }
-        }
         stage('Build') {
             steps {
                 sh 'mvn clean install'
-            }
-        }
-        stage('Test') {
-            steps {
-                sh 'mvn test'
             }
         }
     }
