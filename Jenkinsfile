@@ -1,8 +1,8 @@
 pipeline {
     agent any
     tools{
-        jdk   'jdk21'
-        maven 'maven3'
+        jdk   "jdk21"
+        maven "maven3"
     }
     environment {
         SNAP_REPO = "vprofile-snapshot"
