@@ -22,3 +22,6 @@ EOF
 sudo apt update
 
 sudo apt install docker-ce docker-ce-cli docker-buildx-plugin docker-compose-plugin -y
+
+#adding jenkins user to dockergroup
+sudo usermod -aG docker jenkins
