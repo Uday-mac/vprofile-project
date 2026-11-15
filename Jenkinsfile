@@ -38,6 +38,17 @@ pipeline {
                 archiveArtifacts artifacts: 'trivy-results.json', fingerprint: true
             }
         }
+        stage('Generate SBOM'){
+            steps {
+                mkdir -p reports
+                sh 'trivy fs --format cyclonedx --output reports/sbom-cyclonedx.json'
+            }
+        }
+        stage('archive SBOM reports') {
+            steps {
+                archiveArtifacts artifacts: 'reports/sbom-cyclonedx.json', fingerprint: true
+            }
+        }
         // stage('Build') {
         //     steps {
         //         sh 'mvn -s settings.xml -DskipTests install'
