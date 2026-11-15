@@ -71,7 +71,7 @@ pipeline {
                     echo "Archieve the artifact..."
                     archiveArtifacts artifacts: '**/*.war', fingerprint: true
                 }
-            }sonar.projectName
+            }
         }
         stage('Test') {
             steps {
