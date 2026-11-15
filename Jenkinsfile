@@ -40,7 +40,6 @@ pipeline {
         }
         stage('Generate SBOM'){
             steps {
-                mkdir -p reports
                 sh 'trivy fs --format cyclonedx --output reports/sbom-cyclonedx.json'
             }
         }
