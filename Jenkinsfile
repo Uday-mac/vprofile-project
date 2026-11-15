@@ -71,7 +71,7 @@ pipeline {
                     echo "Archieve the artifact..."
                     archiveArtifacts artifacts: '**/*.war', fingerprint: true
                 }
-            }
+            }sonar.projectName
         }
         stage('Test') {
             steps {
@@ -82,6 +82,20 @@ pipeline {
             steps {
                 sh 'mvn -s settings.xml checkstyle:checkstyle'
             }
+        }
+        stage('SonarQube analysis') {
+          def scannerHome = tool 'sonarscanner';
+          withSonarQubeEnv('sonarserver') {
+          sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=vprofile \
+          -Dsonar.projectName=vprofile \
+          -Dsonar.projectVersion=1.0 \
+          -Dsonar.sources=src/ \
+          -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
+          -Dsonar.junit.reportPaths=target/surefire-reports/ \
+          -Dsonar.jacoco.reportPaths=target/jacoco.exec \
+          -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
+          '''
+          }
         }
     }
 }
