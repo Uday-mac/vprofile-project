@@ -11,7 +11,6 @@ pipeline {
         jdk   "JDK21"
         maven "maven3.9"
     }
-    colors
     environment {
         SNAP_REPO = "vprofile-snapshot"
         RELEASE_REPO = "vprofile-release"
