@@ -1,9 +1,17 @@
+def COLOR_MAP = [
+    'SUCCESS' : 'good',      // Green
+    'UNSTABLE' : 'warning',  // Yellow/Orange
+    'FAILURE' : 'danger',    // Red
+    'ABORTED'  : '#808080'   // Gray (or custom hex code)
+]
+
 pipeline {
     agent any
     tools{
         jdk   "JDK21"
         maven "maven3.9"
     }
+    colors
     environment {
         SNAP_REPO = "vprofile-snapshot"
         RELEASE_REPO = "vprofile-release"
@@ -119,7 +127,7 @@ pipeline {
                 groupId: 'QA',
                 version: "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}",
                 repository: "${env.RELEASE_REPO}",
-                credentialsId: 'nexuslogin',
+                credentialsId: "${env.NEXUS_LOGIN}",
                 artifacts: [
                 [artifactId: 'vproapp',
                 classifier: '',
@@ -128,6 +136,13 @@ pipeline {
         ]
      )
             }
+        }
+    }
+    post {
+        always {
+            slslackSend channel: '#vprofie',
+            color: COLOR_MAP[currentBuild.currentResult] ?: '#808080',
+            message: "Find Status of Pipeline:- ${currentBuild.currentResult} ${env.JOB_NAME} ${env.BUILD_NUMBER} ${BUILD_URL}"
         }
     }
 }
