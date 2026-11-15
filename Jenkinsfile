@@ -17,10 +17,31 @@ pipeline {
 
     }
     stages {
-        stage('Build') {
+        stage('installing trivy') {
             steps {
-                sh 'mvn -s settings.xml -DskipTests install'
+                sh ''' sudo apt-get install wget gnupg -y \
+                sudo wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg > /dev/null \
+                echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb generic main" | sudo tee -a /etc/apt/sources.list.d/trivy.list \
+                sudo apt-get update \
+                sudo apt-get install trivy -y
+                '''
             }
         }
+        stage('SAST'){
+            steps {
+                sh 'sudo mkdir -p reports'
+                sh 'trivy fs --format json --exit-code 0 --severity HIGH,CRITICAL --output trivy-results.json .'
+            }
+        }
+        stage('archive scan reports') {
+            steps {
+                archiveArtifacts artifacts: 'trivy-results.json', fingerprint: true
+            }
+        }
+        // stage('Build') {
+        //     steps {
+        //         sh 'mvn -s settings.xml -DskipTests install'
+        //     }
+        // }
     }
 }
