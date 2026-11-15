@@ -139,7 +139,7 @@ pipeline {
     }
     post {
         always {
-            slslackSend channel: '#vprofile',
+            slackSend channel: '#vprofile',
             color: COLOR_MAP[currentBuild.currentResult] ?: '#808080',
             message: "Find Status of Pipeline:- ${currentBuild.currentResult} ${env.JOB_NAME} ${env.BUILD_NUMBER} ${BUILD_URL}"
         }
