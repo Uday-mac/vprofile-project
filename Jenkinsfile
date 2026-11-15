@@ -62,10 +62,26 @@ pipeline {
                 archiveArtifacts artifacts: 'reports/sbom-cyclonedx.json', fingerprint: true
             }
         }
-        // stage('Build') {
-        //     steps {
-        //         sh 'mvn -s settings.xml -DskipTests install'
-        //     }
-        // }
+        stage('Build') {
+            steps {
+                sh 'mvn -s settings.xml -DskipTests install'
+            }
+            post{
+                success {
+                    echo "Archieve the artifact..."
+                    archiveArtifacts artifacts: '**/*.war', fingerprint: true
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('checkstyle') {
+            steps {
+                sh 'mvn checkstyle:checkstyle'
+            }
+        }
     }
 }
