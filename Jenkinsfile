@@ -40,7 +40,21 @@ pipeline {
         }
         stage('Generate SBOM'){
             steps {
-                sh 'trivy fs --format cyclonedx --output reports/sbom-cyclonedx.json .'
+                sh '''
+            mkdir -p reports
+
+            # Give Jenkins ownership of reports directory
+            sudo chown -R $(whoami):$(id -gn) reports
+
+            # Give owner read/write permissions
+            chmod -R u+rwX reports
+
+            # Generate CycloneDX SBOM
+            trivy fs \
+                --format cyclonedx \
+                --output reports/sbom-cyclonedx.json \
+                .
+            '''
             }
         }
         stage('archive SBOM reports') {
