@@ -84,7 +84,10 @@ pipeline {
             }
         }
         stage('SonarQube analysis') {
-          def scannerHome = tool 'sonarscanner';
+          environment {
+            scannerHome = tool 'sonarscanner';
+          }
+          steps {
           withSonarQubeEnv('sonarserver') {
           sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=vprofile \
           -Dsonar.projectName=vprofile \
@@ -95,6 +98,7 @@ pipeline {
           -Dsonar.jacoco.reportPaths=target/jacoco.exec \
           -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
           '''
+          }
           }
         }
     }
