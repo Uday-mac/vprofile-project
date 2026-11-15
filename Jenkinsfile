@@ -13,7 +13,7 @@ pipeline {
         NEXUS_PASS = "Devops@2026"
         NEXUSIP = "172.31.30.233"
         NEXUSPORT = "8081"
-        NEXUS_LOGIN = "nexus_login"
+        NEXUS_LOGIN = "nexuslogin"
 
     }
     stages {
@@ -119,7 +119,7 @@ pipeline {
                 groupId: 'QA',
                 version: "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}",
                 repository: "${env.RELEASE_REPO}",
-                credentialsId: "${env.NEXUS_LOGIN}",
+                credentialsId: 'nexuslogin',
                 artifacts: [
                 [artifactId: 'vproapp',
                 classifier: '',
