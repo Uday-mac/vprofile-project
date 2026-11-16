@@ -23,7 +23,7 @@ pipeline {
         NEXUS_LOGIN = "nexuslogin"
         AWSCRED = "ecr:us-east-1:aws_cred"
         APPREGISTRY = "821643762246.dkr.ecr.us-east-1.amazonaws.com/vprofileappimg"
-        APPURL = "https:821643762246.dkr.ecr.us-east-1.amazonaws.com"
+        APPURL = "https://821643762246.dkr.ecr.us-east-1.amazonaws.com"
 
     }
     stages {
@@ -151,7 +151,7 @@ pipeline {
                 script {
                     docker.withRegistry(APPURL,AWSCRED){
                         dockerImage.push
-                        dockerImahe.push("latest")
+                        dockerImage.push("latest")
                     } 
                 }
             }
