@@ -142,7 +142,7 @@ pipeline {
         stage('Build app image') {
             steps {
                 script {
-                    dockerImage = docker.build(APPREGISTRY + ":${env.BUILD_NUMBER}"," -f ./Dockerfiles/app/ .")
+                    dockerImage = docker.build(APPREGISTRY + ":${env.BUILD_NUMBER}"," -f /Dockerfiles/app/Dockerfile .")
                 }
             }
         }
