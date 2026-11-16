@@ -146,6 +146,20 @@ pipeline {
                 }
             }
         }
+        stage('Scan image using trivy') {
+            environment {
+                IMAGE = "${APPREGISTRY}:${env.BUILD_NUMBER}"
+            }
+            steps {
+                sh 'mkdir -p reports'
+                sh 'trivy image --format json --exit-code 0 --severity HIGH,CRITICAL --output reports/trivy-image.json "${IMAGE}"'
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'reports/trivy-image.json', fingerprint: true, allowEmptyArchive: true
+                }
+            }
+        }
         stage('push image') {
             steps {
                 script {
