@@ -24,6 +24,8 @@ pipeline {
         AWSCRED = "ecr:us-east-1:aws_cred"
         APPREGISTRY = "821643762246.dkr.ecr.us-east-1.amazonaws.com/vprofileappimg"
         APPURL = "https://821643762246.dkr.ecr.us-east-1.amazonaws.com"
+        CLUSTERNAME = "vproappdev"
+        SERVICE = "vproappservice"
 
     }
     stages {
@@ -127,7 +129,7 @@ pipeline {
         //         protocol: 'http',
         //         nexusUrl: "${NEXUSIP}:${NEXUSPORT}",
         //         groupId: 'QA',
-        //         version: "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}",
+        //         version: "${env.BUILD_TIMESTAMP}-${env.GIT_COMMIT}",
         //         repository: "${env.RELEASE_REPO}",
         //         credentialsId: "${env.NEXUS_LOGIN}",
         //         artifacts: [
@@ -167,6 +169,15 @@ pipeline {
                         dockerImage.push()
                         dockerImage.push("latest")
                     } 
+                }
+            }
+        }
+        stage('Deploy to ecs') {
+            steps {
+                withAWS(credentials: 'aws_cred', region: 'us-east-1') {
+                sh ''' aws ecs update-service --cluster "${CLUSTERNAME}" \
+                       --service "${SERVICE}" --force-new-deployment 
+                   '''
                 }
             }
         }
