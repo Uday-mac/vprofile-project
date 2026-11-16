@@ -150,7 +150,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry(APPURL,AWSCRED){
-                        dockerImage.push
+                        dockerImage.push()
                         dockerImage.push("latest")
                     } 
                 }
