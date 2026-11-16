@@ -21,6 +21,9 @@ pipeline {
         NEXUSIP = "172.31.30.233"
         NEXUSPORT = "8081"
         NEXUS_LOGIN = "nexuslogin"
+        AWSCRED = "ecr:us-east-1:aws_cred"
+        APPREGISTRY = "821643762246.dkr.ecr.us-east-1.amazonaws.com/vprofileappimg"
+        APPURL = "https:821643762246.dkr.ecr.us-east-1.amazonaws.com"
 
     }
     stages {
@@ -132,8 +135,25 @@ pipeline {
                 classifier: '',
                 file: 'target/vprofile-v2.war',
                  type: 'war']
-        ]
-     )
+                ]
+                )
+            }
+        }
+        stage('Build app image') {
+            steps {
+                script {
+                    dockerImage = docker.build(APPREGISTRY + ":${env.BUILD_NUMBER}","./Dockerfiles/app/")
+                }
+            }
+        }
+        stage('push image') {
+            steps {
+                script {
+                    docker.withRegistry(APPURL,AWSCRED){
+                        dockerImage.push
+                        dockerImahe.push("latest")
+                    } 
+                }
             }
         }
     }
